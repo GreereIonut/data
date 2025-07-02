@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ESP32 Mașină & Dashboard</title>
+
+  <!-- Google-Font & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Leaflet + your styles -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="/style.css"/>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js" defer></script>
+  <script src="/script.js" defer></script>
+</head>
+
+<body>
+  <div id="app">
+    <!-- ───────── HEADER ───────── -->
+    <header>
+      <i class="bx bx-car"></i>
+      ESP32 Mașină & Dashboard
+    </header>
+
+    <main>
+      <!-- ────── LEFT – TELEMETRY ────── -->
+      <section id="panel-sensors">
+        <h2><i class="bx bx-signal-4"></i> Panou Senzori</h2>
+
+        <div class="grid">
+
+          <!-- Temperature -->
+          <article class="card">
+            <h3><i class="bx bx-droplet"></i> Temperatură</h3>
+            <div class="mini-gauge">
+              <svg viewBox="0 0 100 50">
+                <path class="bg" d="M10,50 A40,40 0 0,1 90,50"/>
+                <path id="temp-arc" class="fg" d="M10,50 A40,40 0 0,1 90,50"/>
+              </svg>
+              <div id="temp-text">-- °C</div>
+            </div>
+          </article>
+
+          <!-- Humidity -->
+          <article class="card">
+            <h3><i class="bx bx-water"></i> Umiditate</h3>
+            <div class="mini-gauge">
+              <svg viewBox="0 0 100 50">
+                <path class="bg" d="M10,50 A40,40 0 0,1 90,50"/>
+                <path id="hum-arc" class="fg" d="M10,50 A40,40 0 0,1 90,50"/>
+              </svg>
+              <div id="hum-text">-- %</div>
+            </div>
+          </article>
+
+          <!-- Air-quality -->
+          <article class="card">
+            <h3><i class="bx bx-wind"></i> Calitate Aer</h3>
+            <div class="aq-track">
+              <div id="gas-bar" class="aq-fill"></div>
+            </div>
+            <div id="gas-text" class="small">-- PPM</div>
+          </article>
+
+          <!-- Speed -->
+          <article class="card">
+            <h3><i class="bx bx-tachometer"></i> Viteză</h3>
+            <div class="speed-gauge">
+              <svg viewBox="0 0 100 50">
+                <circle cx="50" cy="50" r="38" class="ring"/>
+                <line id="needle" x1="50" y1="50" x2="50" y2="15"/>
+              </svg>
+              <div id="speed-text">0 km/h</div>
+            </div>
+          </article>
+
+          <!-- Current -->
+          <article class="card single">
+            <h3><i class="bx bx-bolt"></i> Curent</h3>
+            <div id="current-text" class="big">-- A</div>
+          </article>
+
+          <!-- GPS -->
+          <article class="card gps">
+            <h3><i class="bx bx-map"></i> Date GPS</h3>
+            <div id="gps-map" class="map-placeholder">
+              Harta va apărea aici
+            </div>
+            <div id="gps-text" class="small">Lat: --, Lon: --</div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ────── RIGHT – CONTROL ────── -->
+      <section id="panel-controls">
+        <h2><i class="bx bx-joystick"></i> Panou Control</h2>
+
+        <!-- arrows -->
+        <div class="pad">
+          <button data-cmd="/forward"  id="btn-forward"  class="arrow up"></button>
+          <button data-cmd="/left"     id="btn-left"    class="arrow left"></button>
+          <button data-cmd="/right"    id="btn-right"   class="arrow right"></button>
+          <button data-cmd="/backward" id="btn-backward" class="arrow down"></button>
+        </div>
+
+        <!-- speed slider -->
+        <div class="speed-box">
+          <label>Viteză <span id="speed-val">50</span>%</label>
+          <input type="range" id="speed-slider" min="0" max="100" value="50"/>
+        </div>
+
+        <button id="btn-stop" class="stop">STOP</button>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
