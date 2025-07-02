@@ -31,6 +31,7 @@
     <header>
       <i class="bx bx-car"></i>
       ESP32 Mașină & Dashboard
+      <span id="connection-status">Conectare...</span>
     </header>
 
     <main>
@@ -78,7 +79,8 @@
             <h3><i class="bx bx-tachometer"></i> Viteză</h3>
             <div class="speed-gauge">
               <svg viewBox="0 0 100 50">
-                <circle cx="50" cy="50" r="38" class="ring"/>
+                <path class="ring" d="M12,50 A38,38 0 0,1 88,50"/>
+                <path id="speed-arc" class="ring-fg" d="M12,50 A38,38 0 0,1 88,50"/>
                 <line id="needle" x1="50" y1="50" x2="50" y2="15"/>
               </svg>
               <div id="speed-text">0 km/h</div>
