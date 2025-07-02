@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currTxt: $('current-text'),
     proxTxt: $('proximity-text'),
     spdTxt: $('speed-text'), needle: $('needle'),
+    spdArc: $('speed-arc'),
     gpsTxt: $('gps-text'), satTxt: $('satellites-text')
   };
 
@@ -28,8 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- SSE ---------- */
   if (window.EventSource) {
     const sse = new EventSource('/events');
-    sse.onopen  = () => conn.textContent = 'Conectat';
-    sse.onerror = () => conn.textContent = 'Deconectat';
+    sse.onopen  = () => { conn.textContent = 'Conectat'; conn.classList.add('conn-ok'); };
+    sse.onerror = () => { conn.textContent = 'Deconectat'; conn.classList.remove('conn-ok'); };
 
     sse.addEventListener('telemetry_update', e => {
       const d = JSON.parse(e.data);
@@ -54,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
       el.spdTxt.textContent = `${spd.toFixed(0)} km/h`;
       const deg = -90 + (spd / LIMITS.speed) * 180;   // -90° … +90°
       el.needle.style.transform = `rotate(${deg}deg)`;
+      updateArc(el.spdArc, spd, LIMITS.speed);
 
       // 5 GPS
       if (d.latitude && d.longitude) {
@@ -67,8 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateArc(path, value, max) {
     const pct = Math.min(value, max) / max;
-    path.style.strokeDasharray  = '126';
-    path.style.strokeDashoffset = 126 * (1 - pct);
+    const len = path.dataset.len || path.getTotalLength();
+    path.dataset.len = len;
+    path.style.strokeDasharray  = len;
+    path.style.strokeDashoffset = len * (1 - pct);
+    const hue = 120 - pct * 120;             // green -> red
+    path.style.stroke = `hsl(${hue}, 70%, 50%)`;
   }
 
   /* ---------- helpers ---------- */
